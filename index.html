@@ -1,0 +1,222 @@
+<!-- Daisy Sanchez
+     COMP 20 Web Programming
+     Homework 6: More Javascript Practice
+     Part 1: Quick Pick
+     25 February 2020 -->
+<!-- URL:  -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick Pick</title>
+
+    <meta charset="utf-8">
+
+    <a href="part2.html">Amicable Numbers</a>
+
+    <style type="text/css">
+        body{font-size:20px;}
+    </style>
+
+    <script type="text/javascript" language="javascript">
+        // both first and second parts of the assignment start here. 
+        randNums = new Array(6);
+
+        function notFound(val, pos)
+        {
+            found = 0;
+            for(i=0; i<pos; i++){
+                if(randNums[i] == val){
+                    found = 1;
+                }
+            }
+            return found;
+        }
+
+        // finds random values to test for game predictions
+        for(i=0; i < 6; i++){
+            if(i < 5){
+                // Random number from 1 to 48 
+                n = Math.random() * 47 + 1;
+                n = parseInt(n);
+                while(notFound(n, i) == 1){
+                    n = Math.random() * 47 + 1;
+                    n = parseInt(n);
+                }
+                randNums[i] = n;
+            } else if(i == 5){
+                // Random number from 1 to 18
+                n =  Math.random() * 17 + 1;
+                n = parseInt(n);
+                while(notFound(n, i) == 1){
+                    n = Math.random() * 17 + 1;
+                    n = parseInt(n);
+                }
+                randNums[i] = n;
+            }
+        }
+        
+        /*********************************************************
+        // Part of first part of assignment
+        document.write("<br> Displaying random numbers: ");
+        for(j=0; j<6; j++){
+            document.write(randNums[j] + " ");
+        }
+        
+        // sort array
+        // had originally tried randNums.sort() but it would simply rearrange the numbers without sorting them in order. 
+        function sortArray(arr)
+        {
+            i=0;
+            while(i<arr.length){
+                minIdx  = i;
+                minVal = arr[i];
+                oldVal = arr[i];
+                for(t=i; t<arr.length; t++){
+                    if(arr[t] < minVal){
+                        minIdx = t;
+                        minVal = arr[t];
+                    }
+                }
+                arr[i] = minVal;
+                arr[minIdx] = oldVal;
+                i++;
+            }
+            return arr;
+        }
+
+        randNums = sortArray(randNums);
+
+        document.write("<br> Displaying sorted random numbers: ");
+        // Display sorted numbers in the array 
+        for(k=0; k<6; k++){
+            document.write(randNums[k] + " ");
+        }
+        *********************************************************/
+
+        // Start of game
+        document.write("<br>Mass Lottery - Lucky for Life")
+
+        
+        document.write("<br>Play the Game!");
+        document.write("<br>Enter 5 numbers separated by a space and a 'Lucky Ball' number.");
+
+
+        function findPayout(matches, lucky)
+        {
+            
+            if (matches == 5 && lucky == 1)
+                document.write("$7000 a WEEK for LIFE!")
+            else if (matches == 5 && lucky == 0)
+                document.write("$25,000 a YEAR for LIFE!");
+            else if (matches == 4 && lucky == 1)
+                document.write("$5000");
+            else if (matches == 4 && lucky == 0)
+                document.write("$200");
+            else if (matches == 3 && lucky == 1)
+                document.write("$150");
+            else if (matches == 3 && lucky == 0)
+                document.write("$20");
+            else if (matches == 2 && lucky == 1)
+                document.write("$25");
+            else if (matches == 2 && lucky == 0)
+                document.write("$3");
+            else if (matches == 1 && lucky == 1)
+                document.write("$6");
+            else if (matches == 0 && lucky == 1)
+                document.write("$4");
+            else
+                document.write("$0");
+            
+        }
+
+        function isMatch(val, made)
+        {
+            for(m=0; m<5; m++){
+                if(made[m] == val){
+                    return 1;
+                }
+            }
+            return 0;
+        }
+
+        function isLucky(val, made)
+        {
+            if(val == made[5]){
+                return 1; 
+            } else {
+                return 0;
+            }
+        }
+
+        function matchValues(givenVals, luckyVal, madeVals)
+        {
+            matchArr = new Array(2);
+            matchArr[0] = 0;
+            matchArr[1] = 0;
+            for(i=0; i<5; i++){
+                if(isMatch(givenVals[i], madeVals) == 1){
+                    matchArr[0] = matchArr[0] + 1;
+                }
+            }
+            if(isLucky(luckyVal, madeVals) == 1){
+                matchArr[1] = 1;
+            }
+
+            return matchArr;
+        }
+
+        // creates array with each of five numbers
+        function separateNums(inputNums)
+        {
+            numArr = new Array(5);
+
+            list = inputNums;
+            idxFront = 0;
+            for(i=0; i<4; i++){
+                n = parseInt(list);
+                numArr[i] = n;
+                idxFront = inputNums.indexOf(" ", 0);
+                list = list.substring(idxFront+1, list.length);
+            }
+
+            n = parseInt(list);
+            numArr[i] = n;
+            
+
+            return numArr;
+        }
+
+        // driver function
+        // takes in variables and calls needed functions
+        function findMatches()
+        {
+            fivenums = document.getElementById("nums").value;
+            luckyball = document.getElementById("luck").value;
+
+            sepNums = separateNums(fivenums);
+
+            numMatches = new Array(2);
+            numMatches = matchValues(sepNums, luckyball, randNums);
+
+            document.write("<br> You get : ");
+            
+            findPayout(numMatches[0], numMatches[1]);
+            
+            //document.write("<br> Five Numbers: " + fivenums);
+            //document.write("<br> Lucky Ball: " + luckyball);
+        }
+    </script>
+</head>
+<body>
+    <form>
+        Five Numbers <input type="text" name="nums" id="nums">
+        <br />
+        <br />
+        Lucky Ball <input type="text" name="luck" id="luck">
+        <br />
+        <br />
+        <input type="button" value="Play" onclick="findMatches()">
+    </form>
+
+</body>
+</html>
